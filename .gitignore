@@ -1,56 +1,8 @@
-# ============================================================
-# Lithium 本地化工作區 —— 只留「可編輯的工作成果」，大產物一律排除
-# 進倉：README.md、*.py、*.patch、*.tsv、*.json、lith-glossary.md、
-#        values-*/（各語系 strings/plurals/arrays）、logs/（純文字證據）
-# ============================================================
-
-# apktool 解包／重建工作樹（本輪 862 MB 的主體：smali、res、lib、assets、
-# app-106/ app-patched/ prev-102/ ref-102/ upstream-res/ 與 lithiumpatch 的 git clone）
 build-0.25.2/
-app-*/
-prev-*/
-ref-*/
-upstream-res/
-lithiumpatch/
-
-# 一切 APK／壓縮／簽名中介檔（走 GitHub Release 資產，不進 git 歷史）
 *.apk
-*.apk.idsig
-*.apk.cache
 *.zip
-*.tar
-*.tar.gz
-*.tgz
-*.jar
-*.dex
-*.orig
-aligned-*.apk
-unaligned-*.apk
-
-# 解包出來的目錄樹（就算有人把解包物搬到頂層也不入倉）
-smali/
-smali_classes*/
-res/
-assets/
-lib/
-original/
-unknown/
-resources.arsc
-
-# 憑證與密碼（公開倉，金鑰與密碼都只留本地）
-*.keystore
-*.jks
-*.keystore.jks
-*.pem
-*.key
-*.p12
-*.pfx
-KEYSTORE-PASS.local
-
-# Python / Go / 編輯器殘留
+*.aab
 __pycache__/
-*.py[cod]
-.idea/
-.vscode/
-.DS_Store
-*.swp
+*.pyc
+KEYSTORE-PASS.local
+*.local

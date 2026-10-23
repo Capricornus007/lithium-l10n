@@ -41,7 +41,17 @@
 
 APK 本體走 **GitHub Release 資產**（不進 git 歷史）：
 `https://github.com/Capricornus007/lithium-l10n/releases/tag/v0.25.2-build107`
-→ `Lithium-Pro-v0.25.2_build_107-zhTW補齊-lithiumpatch-重簽名.apk`（28,291,261 bytes，MD5 `0445ce889ac87bce9c26acf61d5cf533`）。
+→ 資產檔名 `Lithium-Pro-v0.25.2_build_107-zhTW-lithiumpatch-resigned.apk`
+（顯示標籤「Lithium Pro 0.25.2 build 107（繁中補齊 + lithiumpatch + 重簽名）」；
+**GitHub 會把資產檔名裡的非 ASCII 字元洗掉**，所以檔名用純半形，中文只放標籤；
+本地對應檔名仍是 `~/Downloads/Lithium-Pro-v0.25.2_build_107-zhTW補齊-lithiumpatch-重簽名.apk`）
+- 28,291,261 bytes｜MD5 `0445ce889ac87bce9c26acf61d5cf533`｜SHA-256 `a108839e8594d1fc641fa1ccf68ac6093c7f1b58dd2b550e49d46b3694649d67`
+- 已實測把資產**從 GitHub 下載回來**比對：MD5／SHA-256 與本地交付檔逐字相同，
+  且 `apksigner verify -v --min-sdk-version 21` 對下載件一樣回 v1／v2／v3 全 true（驗的是產物，不是配置）。
+取回命令：
+```sh
+gh release download v0.25.2-build107 --repo Capricornus007/lithium-l10n --clobber
+```
 
 **新克隆重跑前要做的起手式**（腳本寫死讀 `build-0.25.2/` 下的工作檔）：
 ```sh

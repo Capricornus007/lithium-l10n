@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_screen_rotation_keys">
+        <item>Kapalı</item>
+        <item>Dikey</item>
+        <item>Yatay</item>
+    </string-array>
+    <string-array name="pref_volume_pagination_keys">
+        <item>Kapalı</item>
+        <item>Açık</item>
+        <item>Ters çevir</item>
+    </string-array>
+</resources>

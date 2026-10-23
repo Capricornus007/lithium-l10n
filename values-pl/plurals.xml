@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="book_add_to_category_done">
+        <item quantity="one">%1$d książka dodana do kategorii %2$s.</item>
+        <item quantity="few">%1$d książki dodane do kategorii %2$s</item>
+        <item quantity="many">%1$d książek dodanych do kategorii %2$s</item>
+        <item quantity="other">%1$d książek dodanych do kategorii %2$s</item>
+    </plurals>
+    <plurals name="book_delete_dialog_title_multi">
+        <item quantity="one">Usunąć %1$d książkę?</item>
+        <item quantity="few">Usunąć %1$d książki?</item>
+        <item quantity="many">Usunąć %1$d książek?</item>
+        <item quantity="other">Usunąć %1$d książek?</item>
+    </plurals>
+    <plurals name="book_deleted">
+        <item quantity="one">Usunięto książkę.</item>
+        <item quantity="few">Usunięto %1$d książki</item>
+        <item quantity="many">Usunięto %1$d książek</item>
+        <item quantity="other">Usunięto %1$d książek</item>
+    </plurals>
+    <plurals name="book_remove_from_category_dialog_message">
+        <item quantity="one">Usunąć %1$d książkę z kategorii %2$s?</item>
+        <item quantity="few">Usunąć %1$d książki z kategorii %2$s?</item>
+        <item quantity="many">Usunąć %1$d książek z kategorii %2$s??</item>
+        <item quantity="other">Usunąć %1$d książek z kategorii %2$s??</item>
+    </plurals>
+    <plurals name="library_update_failed_details_title">
+        <item quantity="one">%1$d książka nie mogła zostać załadowana</item>
+        <item quantity="few">%1$d książki nie mogły zostać załadowane</item>
+        <item quantity="many">%1$d książek nie mogło zostać załadowanych</item>
+        <item quantity="other">%1$d książek nie mogło zostać załadowanych</item>
+    </plurals>
+    <plurals name="library_updated_new">
+        <item quantity="one">%1$d książka dodana do biblioteki.</item>
+        <item quantity="few">%1$d książki dodane do biblioteki.</item>
+        <item quantity="many">%1$d książek dodanych do biblioteki.</item>
+        <item quantity="other">%1$d książek dodanych do biblioteki.</item>
+    </plurals>
+    <plurals name="mtrl_badge_content_description">
+        <item quantity="one">%d nowe powiadomienie</item>
+        <item quantity="few">%d nowe powiadomienia</item>
+        <item quantity="many">%d nowych powiadomień</item>
+        <item quantity="other">%d nowego powiadomienia</item>
+    </plurals>
+    <plurals name="reader_search_results">
+        <item quantity="one">%1$d wynik</item>
+        <item quantity="few">%1$d wyniki</item>
+        <item quantity="many">%1$d wyników</item>
+        <item quantity="other">%1$d wyników</item>
+    </plurals>
+</resources>

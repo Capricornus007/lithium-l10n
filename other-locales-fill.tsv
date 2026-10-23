@@ -1,0 +1,144 @@
+de/androidx_startup	androidx.startup
+de/app_name	Lithium
+de/app_name_pro	Lithium Pro
+de/appbar_scrolling_view_behavior	com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior
+de/bottom_sheet_behavior	com.google.android.material.bottomsheet.BottomSheetBehavior
+de/character_counter_pattern	%1$d/%2$d
+de/chip_text	Chip-Text
+de/cpv_custom	Benutzerdefiniert
+de/cpv_default_title	Farbe auswählen
+de/cpv_presets	Voreinstellungen
+de/cpv_select	Auswählen
+de/cpv_transparency	Transparenz
+de/fab_transformation_scrim_behavior	com.google.android.material.transformation.FabTransformationScrimBehavior
+de/fab_transformation_sheet_behavior	com.google.android.material.transformation.FabTransformationSheetBehavior
+de/hide_bottom_view_on_scroll_behavior	com.google.android.material.behavior.HideBottomViewOnScrollBehavior
+de/material_clock_display_divider	:
+de/material_slider_range_end	Bereichsende,
+de/material_slider_range_start	Bereichsstart,
+de/mtrl_exceed_max_badge_number_suffix	%1$d%2$s
+de/mtrl_picker_cancel	@android:string/cancel
+de/path_password_eye	M12,4.5C7,4.5 2.73,7.61 1,12c1.73,4.39 6,7.5 11,7.5s9.27,-3.11 11,-7.5c-1.73,-4.39 -6,-7.5 -11,-7.5zM12,17c-2.76,0 -5,-2.24 -5,-5s2.24,-5 5,-5 5,2.24 5,5 -2.24,5 -5,5zM12,9c-1.66,0 -3,1.34 -3,3s1.34,3 3,3 3,-1.34 3,-3 -1.34,-3 -3,-3z
+de/path_password_eye_mask_strike_through	M2,4.27 L19.73,22 L22.27,19.46 L4.54,1.73 L4.54,1 L23,1 L23,23 L1,23 L1,4.27 Z
+de/path_password_eye_mask_visible	M2,4.27 L2,4.27 L4.54,1.73 L4.54,1.73 L4.54,1 L23,1 L23,23 L1,23 L1,4.27 Z
+de/path_password_strike_through	M3.27,4.27 L19.74,20.74
+es/androidx_startup	androidx.startup
+es/app_name	Lithium
+es/app_name_pro	Lithium Pro
+es/appbar_scrolling_view_behavior	com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior
+es/bottom_sheet_behavior	com.google.android.material.bottomsheet.BottomSheetBehavior
+es/character_counter_pattern	%1$d/%2$d
+es/chip_text	Texto del chip
+es/cpv_custom	Personalizado
+es/cpv_default_title	Seleccionar un color
+es/cpv_presets	Predeterminados
+es/cpv_select	Seleccionar
+es/cpv_transparency	Transparencia
+es/fab_transformation_scrim_behavior	com.google.android.material.transformation.FabTransformationScrimBehavior
+es/fab_transformation_sheet_behavior	com.google.android.material.transformation.FabTransformationSheetBehavior
+es/hide_bottom_view_on_scroll_behavior	com.google.android.material.behavior.HideBottomViewOnScrollBehavior
+es/material_clock_display_divider	:
+es/material_slider_range_end	Fin del intervalo,
+es/material_slider_range_start	Inicio del intervalo,
+es/mtrl_exceed_max_badge_number_suffix	%1$d%2$s
+es/mtrl_picker_cancel	@android:string/cancel
+es/path_password_eye	M12,4.5C7,4.5 2.73,7.61 1,12c1.73,4.39 6,7.5 11,7.5s9.27,-3.11 11,-7.5c-1.73,-4.39 -6,-7.5 -11,-7.5zM12,17c-2.76,0 -5,-2.24 -5,-5s2.24,-5 5,-5 5,2.24 5,5 -2.24,5 -5,5zM12,9c-1.66,0 -3,1.34 -3,3s1.34,3 3,3 3,-1.34 3,-3 -1.34,-3 -3,-3z
+es/path_password_eye_mask_strike_through	M2,4.27 L19.73,22 L22.27,19.46 L4.54,1.73 L4.54,1 L23,1 L23,23 L1,23 L1,4.27 Z
+es/path_password_eye_mask_visible	M2,4.27 L2,4.27 L4.54,1.73 L4.54,1.73 L4.54,1 L23,1 L23,23 L1,23 L1,4.27 Z
+es/path_password_strike_through	M3.27,4.27 L19.74,20.74
+pl/androidx_startup	androidx.startup
+pl/app_name	Lithium
+pl/app_name_pro	Lithium Pro
+pl/appbar_scrolling_view_behavior	com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior
+pl/bottom_sheet_behavior	com.google.android.material.bottomsheet.BottomSheetBehavior
+pl/character_counter_pattern	%1$d/%2$d
+pl/chip_text	Tekst chipa
+pl/cpv_custom	Niestandardowy
+pl/cpv_default_title	Wybierz kolor
+pl/cpv_presets	Kolory domyślne
+pl/cpv_select	Wybierz
+pl/cpv_transparency	Przezroczystość
+pl/fab_transformation_scrim_behavior	com.google.android.material.transformation.FabTransformationScrimBehavior
+pl/fab_transformation_sheet_behavior	com.google.android.material.transformation.FabTransformationSheetBehavior
+pl/hide_bottom_view_on_scroll_behavior	com.google.android.material.behavior.HideBottomViewOnScrollBehavior
+pl/material_clock_display_divider	:
+pl/material_slider_range_end	Koniec zakresu,
+pl/material_slider_range_start	Początek zakresu,
+pl/mtrl_exceed_max_badge_number_suffix	%1$d%2$s
+pl/mtrl_picker_cancel	@android:string/cancel
+pl/path_password_eye	M12,4.5C7,4.5 2.73,7.61 1,12c1.73,4.39 6,7.5 11,7.5s9.27,-3.11 11,-7.5c-1.73,-4.39 -6,-7.5 -11,-7.5zM12,17c-2.76,0 -5,-2.24 -5,-5s2.24,-5 5,-5 5,2.24 5,5 -2.24,5 -5,5zM12,9c-1.66,0 -3,1.34 -3,3s1.34,3 3,3 3,-1.34 3,-3 -1.34,-3 -3,-3z
+pl/path_password_eye_mask_strike_through	M2,4.27 L19.73,22 L22.27,19.46 L4.54,1.73 L4.54,1 L23,1 L23,23 L1,23 L1,4.27 Z
+pl/path_password_eye_mask_visible	M2,4.27 L2,4.27 L4.54,1.73 L4.54,1.73 L4.54,1 L23,1 L23,23 L1,23 L1,4.27 Z
+pl/path_password_strike_through	M3.27,4.27 L19.74,20.74
+pt-rBR/androidx_startup	androidx.startup
+pt-rBR/app_name	Lithium
+pt-rBR/app_name_pro	Lithium Pro
+pt-rBR/appbar_scrolling_view_behavior	com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior
+pt-rBR/bottom_sheet_behavior	com.google.android.material.bottomsheet.BottomSheetBehavior
+pt-rBR/character_counter_pattern	%1$d/%2$d
+pt-rBR/chip_text	Texto do chip
+pt-rBR/cpv_custom	Personalizado
+pt-rBR/cpv_default_title	Selecionar uma cor
+pt-rBR/cpv_presets	Predefinições
+pt-rBR/cpv_select	Selecionar
+pt-rBR/cpv_transparency	Transparência
+pt-rBR/fab_transformation_scrim_behavior	com.google.android.material.transformation.FabTransformationScrimBehavior
+pt-rBR/fab_transformation_sheet_behavior	com.google.android.material.transformation.FabTransformationSheetBehavior
+pt-rBR/hide_bottom_view_on_scroll_behavior	com.google.android.material.behavior.HideBottomViewOnScrollBehavior
+pt-rBR/material_clock_display_divider	:
+pt-rBR/material_slider_range_end	Fim do intervalo,
+pt-rBR/material_slider_range_start	Início do intervalo,
+pt-rBR/mtrl_exceed_max_badge_number_suffix	%1$d%2$s
+pt-rBR/mtrl_picker_cancel	@android:string/cancel
+pt-rBR/path_password_eye	M12,4.5C7,4.5 2.73,7.61 1,12c1.73,4.39 6,7.5 11,7.5s9.27,-3.11 11,-7.5c-1.73,-4.39 -6,-7.5 -11,-7.5zM12,17c-2.76,0 -5,-2.24 -5,-5s2.24,-5 5,-5 5,2.24 5,5 -2.24,5 -5,5zM12,9c-1.66,0 -3,1.34 -3,3s1.34,3 3,3 3,-1.34 3,-3 -1.34,-3 -3,-3z
+pt-rBR/path_password_eye_mask_strike_through	M2,4.27 L19.73,22 L22.27,19.46 L4.54,1.73 L4.54,1 L23,1 L23,23 L1,23 L1,4.27 Z
+pt-rBR/path_password_eye_mask_visible	M2,4.27 L2,4.27 L4.54,1.73 L4.54,1.73 L4.54,1 L23,1 L23,23 L1,23 L1,4.27 Z
+pt-rBR/path_password_strike_through	M3.27,4.27 L19.74,20.74
+ru/androidx_startup	androidx.startup
+ru/app_name	Lithium
+ru/app_name_pro	Lithium Pro
+ru/appbar_scrolling_view_behavior	com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior
+ru/bottom_sheet_behavior	com.google.android.material.bottomsheet.BottomSheetBehavior
+ru/character_counter_pattern	%1$d/%2$d
+ru/chip_text	Текст чипа
+ru/cpv_custom	Особый
+ru/cpv_default_title	Выберите цвет
+ru/cpv_presets	Предустановки
+ru/cpv_select	Выбрать
+ru/cpv_transparency	Прозрачность
+ru/fab_transformation_scrim_behavior	com.google.android.material.transformation.FabTransformationScrimBehavior
+ru/fab_transformation_sheet_behavior	com.google.android.material.transformation.FabTransformationSheetBehavior
+ru/hide_bottom_view_on_scroll_behavior	com.google.android.material.behavior.HideBottomViewOnScrollBehavior
+ru/material_clock_display_divider	:
+ru/material_slider_range_end	Конец диапазона,
+ru/material_slider_range_start	Начало диапазона,
+ru/mtrl_exceed_max_badge_number_suffix	%1$d%2$s
+ru/mtrl_picker_cancel	@android:string/cancel
+ru/path_password_eye	M12,4.5C7,4.5 2.73,7.61 1,12c1.73,4.39 6,7.5 11,7.5s9.27,-3.11 11,-7.5c-1.73,-4.39 -6,-7.5 -11,-7.5zM12,17c-2.76,0 -5,-2.24 -5,-5s2.24,-5 5,-5 5,2.24 5,5 -2.24,5 -5,5zM12,9c-1.66,0 -3,1.34 -3,3s1.34,3 3,3 3,-1.34 3,-3 -1.34,-3 -3,-3z
+ru/path_password_eye_mask_strike_through	M2,4.27 L19.73,22 L22.27,19.46 L4.54,1.73 L4.54,1 L23,1 L23,23 L1,23 L1,4.27 Z
+ru/path_password_eye_mask_visible	M2,4.27 L2,4.27 L4.54,1.73 L4.54,1.73 L4.54,1 L23,1 L23,23 L1,23 L1,4.27 Z
+ru/path_password_strike_through	M3.27,4.27 L19.74,20.74
+tr/androidx_startup	androidx.startup
+tr/app_name	Lithium
+tr/app_name_pro	Lithium Pro
+tr/appbar_scrolling_view_behavior	com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior
+tr/bottom_sheet_behavior	com.google.android.material.bottomsheet.BottomSheetBehavior
+tr/character_counter_pattern	%1$d/%2$d
+tr/chip_text	Çip metni
+tr/cpv_custom	Özel
+tr/cpv_default_title	Renk seçin
+tr/cpv_presets	Ön Ayarlar
+tr/cpv_select	Seç
+tr/cpv_transparency	Şeffaflık
+tr/fab_transformation_scrim_behavior	com.google.android.material.transformation.FabTransformationScrimBehavior
+tr/fab_transformation_sheet_behavior	com.google.android.material.transformation.FabTransformationSheetBehavior
+tr/hide_bottom_view_on_scroll_behavior	com.google.android.material.behavior.HideBottomViewOnScrollBehavior
+tr/material_clock_display_divider	:
+tr/material_slider_range_end	Aralık sonu,
+tr/material_slider_range_start	Aralık başlangıcı,
+tr/mtrl_exceed_max_badge_number_suffix	%1$d%2$s
+tr/mtrl_picker_cancel	@android:string/cancel
+tr/path_password_eye	M12,4.5C7,4.5 2.73,7.61 1,12c1.73,4.39 6,7.5 11,7.5s9.27,-3.11 11,-7.5c-1.73,-4.39 -6,-7.5 -11,-7.5zM12,17c-2.76,0 -5,-2.24 -5,-5s2.24,-5 5,-5 5,2.24 5,5 -2.24,5 -5,5zM12,9c-1.66,0 -3,1.34 -3,3s1.34,3 3,3 3,-1.34 3,-3 -1.34,-3 -3,-3z
+tr/path_password_eye_mask_strike_through	M2,4.27 L19.73,22 L22.27,19.46 L4.54,1.73 L4.54,1 L23,1 L23,23 L1,23 L1,4.27 Z
+tr/path_password_eye_mask_visible	M2,4.27 L2,4.27 L4.54,1.73 L4.54,1.73 L4.54,1 L23,1 L23,23 L1,23 L1,4.27 Z
+tr/path_password_strike_through	M3.27,4.27 L19.74,20.74

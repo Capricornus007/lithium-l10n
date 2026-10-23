@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="book_add_to_category_done">
+        <item quantity="one">已將 %1$d 本書加入 %2$s。</item>
+        <item quantity="other">已將 %1$d 本書加入 %2$s。</item>
+    </plurals>
+    <plurals name="book_delete_dialog_title_multi">
+        <item quantity="other">確定要刪除 %1$d 本書？</item>
+    </plurals>
+    <plurals name="book_deleted">
+        <item quantity="one">已刪除這本書。</item>
+        <item quantity="other">已刪除 %1$d 本書。</item>
+    </plurals>
+    <plurals name="book_remove_from_category_dialog_message">
+        <item quantity="one">確定要從 %2$s 移除這 %1$d 本書？</item>
+        <item quantity="other">確定要從 %2$s 移除 %1$d 本書？</item>
+    </plurals>
+    <plurals name="library_update_failed_details_title">
+        <item quantity="one">%1$d 本書無法載入</item>
+        <item quantity="other">%1$d 本書無法載入</item>
+    </plurals>
+    <plurals name="library_updated_new">
+        <item quantity="one">已將 %1$d 本書加入書庫。</item>
+        <item quantity="other">已將 %1$d 本書加入書庫。</item>
+    </plurals>
+    <plurals name="mtrl_badge_content_description">
+        <item quantity="one">%d 則新通知</item>
+        <item quantity="other">%d 則新通知</item>
+    </plurals>
+    <plurals name="reader_search_results">
+        <item quantity="one">%1$d 個結果</item>
+        <item quantity="other">%1$d 個結果</item>
+    </plurals>
+</resources>

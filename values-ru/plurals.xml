@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="book_add_to_category_done">
+        <item quantity="one">%1$d книга добавлена в %2$s.</item>
+        <item quantity="few">%1$d книги добавлено в %2$s.</item>
+        <item quantity="many">%1$d книг добавлено в %2$s.</item>
+        <item quantity="other">%1$d книг добавлено в %2$s.</item>
+    </plurals>
+    <plurals name="book_delete_dialog_title_multi">
+        <item quantity="one">Удалить %1$d книгу?</item>
+        <item quantity="few">Удалить %1$d книги?</item>
+        <item quantity="many">Удалить %1$d книг?</item>
+        <item quantity="other">Удалить %1$d книг?</item>
+    </plurals>
+    <plurals name="book_deleted">
+        <item quantity="one">%1$d книга удалена.</item>
+        <item quantity="few">%1$d книги удалены.</item>
+        <item quantity="many">%1$d книг удалено.</item>
+        <item quantity="other">%1$d книг удалено.</item>
+    </plurals>
+    <plurals name="book_remove_from_category_dialog_message">
+        <item quantity="one">Удалить %1$d книгу из %2$s?</item>
+        <item quantity="few">Удалить %1$d книги из %2$s?</item>
+        <item quantity="many">Удалить %1$d книг из %2$s?</item>
+        <item quantity="other">Удалить %1$d книг из %2$s?</item>
+    </plurals>
+    <plurals name="library_update_failed_details_title">
+        <item quantity="one">%1$d книга не может быть загружена</item>
+        <item quantity="few">%1$d книги не могут быть загружены</item>
+        <item quantity="many">%1$d книг не может быть загружено</item>
+        <item quantity="other">%1$d книг не может быть загружено</item>
+    </plurals>
+    <plurals name="library_updated_new">
+        <item quantity="one">%1$d книга добавлена в Вашу библиотеку.</item>
+        <item quantity="few">%1$d книги добавлено в Вашу библиотеку.</item>
+        <item quantity="many">%1$d книг добавлено в Вашу библиотеку.</item>
+        <item quantity="other">%1$d книг добавлено в Вашу библиотеку.</item>
+    </plurals>
+    <plurals name="mtrl_badge_content_description">
+        <item quantity="one">%d новое уведомление</item>
+        <item quantity="few">%d новых уведомления</item>
+        <item quantity="many">%d новых уведомлений</item>
+        <item quantity="other">%d нового уведомления</item>
+    </plurals>
+    <plurals name="reader_search_results">
+        <item quantity="one">%1$d результат</item>
+        <item quantity="few">%1$d результата</item>
+        <item quantity="many">%1$d результатов</item>
+        <item quantity="other">%1$d результатов</item>
+    </plurals>
+</resources>

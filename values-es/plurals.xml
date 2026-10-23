@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="book_add_to_category_done">
+        <item quantity="one">%1$d libro agregado a %2$s.</item>
+        <item quantity="other">%1$d libros agregados a %2$s.</item>
+    </plurals>
+    <plurals name="book_delete_dialog_title_multi">
+        <item quantity="one">¿Eliminar %1$d libro?</item>
+        <item quantity="other">¿Eliminar %1$d libros?</item>
+    </plurals>
+    <plurals name="book_deleted">
+        <item quantity="one">Libro borrado.</item>
+        <item quantity="other">%1$d libros borrados.</item>
+    </plurals>
+    <plurals name="book_remove_from_category_dialog_message">
+        <item quantity="one">¿Quitar %1$d libro de %2$s?</item>
+        <item quantity="other">¿Quitar %1$d libros de %2$s?</item>
+    </plurals>
+    <plurals name="library_update_failed_details_title">
+        <item quantity="one">%1$d libro no pudo ser cargado</item>
+        <item quantity="other">%1$d libros no pudieron ser cargados</item>
+    </plurals>
+    <plurals name="library_updated_new">
+        <item quantity="one">%1$d libro fue agregado a tu biblioteca.</item>
+        <item quantity="other">%1$d libros fueron agregados a tu biblioteca.</item>
+    </plurals>
+    <plurals name="mtrl_badge_content_description">
+        <item quantity="one">%d notificación nueva</item>
+        <item quantity="other">%d notificaciones nuevas</item>
+    </plurals>
+    <plurals name="reader_search_results">
+        <item quantity="one">%1$d resultado</item>
+        <item quantity="other">%1$d resultados</item>
+    </plurals>
+</resources>

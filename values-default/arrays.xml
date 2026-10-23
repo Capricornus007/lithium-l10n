@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_screen_rotation_keys">
+        <item>Off</item>
+        <item>Portrait</item>
+        <item>Landscape</item>
+    </string-array>
+    <string-array name="pref_screen_rotation_values">
+        <item>auto</item>
+        <item>portrait</item>
+        <item>landscape</item>
+    </string-array>
+    <string-array name="pref_volume_pagination_keys">
+        <item>Off</item>
+        <item>On</item>
+        <item>Reversed</item>
+    </string-array>
+    <string-array name="pref_volume_pagination_values">
+        <item>disabled</item>
+        <item>enabled</item>
+        <item>reversed</item>
+    </string-array>
+    <string-array name="dict_names">
+        <item>webster1913</item>
+    </string-array>
+</resources>

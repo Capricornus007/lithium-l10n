@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_screen_rotation_keys">
+        <item>关闭</item>
+        <item>竖屏</item>
+        <item>横屏</item>
+    </string-array>
+    <string-array name="pref_volume_pagination_keys">
+        <item>关闭</item>
+        <item>开启</item>
+        <item>反向</item>
+    </string-array>
+</resources>

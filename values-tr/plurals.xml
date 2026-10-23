@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="book_add_to_category_done">
+        <item quantity="one">%1$d kitap %2$s kategorisine eklendi.</item>
+        <item quantity="other">%1$d kitap %2$s kategorisine eklendi.</item>
+    </plurals>
+    <plurals name="book_delete_dialog_title_multi">
+        <item quantity="one">%1$d kitap silinsin mi?</item>
+        <item quantity="other">%1$d kitap silinsin mi?</item>
+    </plurals>
+    <plurals name="book_deleted">
+        <item quantity="one">Kitap silindi.</item>
+        <item quantity="other">%1$d kitap silindi.</item>
+    </plurals>
+    <plurals name="book_remove_from_category_dialog_message">
+        <item quantity="one">%1$d kitap %2$s kategorisinden kaldırılsın mı?</item>
+        <item quantity="other">Remove %1$d kitap %2$s kategorisinden kaldırılsın mı?</item>
+    </plurals>
+    <plurals name="library_update_failed_details_title">
+        <item quantity="one">%1$d kitap yüklenemedi</item>
+        <item quantity="other">%1$d kitap yüklenemedi</item>
+    </plurals>
+    <plurals name="library_updated_new">
+        <item quantity="one">%1$d kitap kütüphanenize eklendi.</item>
+        <item quantity="other">%1$d kitap kütüphanenize eklendi.</item>
+    </plurals>
+    <plurals name="mtrl_badge_content_description">
+        <item quantity="one">%d yeni bildirim</item>
+        <item quantity="other">%d yeni bildirim</item>
+    </plurals>
+    <plurals name="reader_search_results">
+        <item quantity="one">%1$d sonuç</item>
+        <item quantity="other">%1$d sonuç</item>
+    </plurals>
+</resources>

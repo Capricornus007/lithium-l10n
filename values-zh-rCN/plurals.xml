@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="book_add_to_category_done">
+        <item quantity="other">%1$d 本书被添加至 %2$s 中。</item>
+    </plurals>
+    <plurals name="book_delete_dialog_title_multi">
+        <item quantity="other">确定要删除 %1$d 本书吗？</item>
+    </plurals>
+    <plurals name="book_deleted">
+        <item quantity="other">已删除 %1$d 本书。</item>
+    </plurals>
+    <plurals name="book_remove_from_category_dialog_message">
+        <item quantity="other">确定要从 %2$s 中移除 %1$d 本书吗？</item>
+    </plurals>
+    <plurals name="library_update_failed_details_title">
+        <item quantity="other">%1$d 本书未能加载。</item>
+    </plurals>
+    <plurals name="library_updated_new">
+        <item quantity="other">%1$d 本书已添加至你的书库中。</item>
+    </plurals>
+    <plurals name="mtrl_badge_content_description">
+        <item quantity="one">%d 条新通知</item>
+        <item quantity="other">%d 条新通知</item>
+    </plurals>
+    <plurals name="reader_search_results">
+        <item quantity="other">%1$d 条结果</item>
+    </plurals>
+</resources>

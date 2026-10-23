@@ -1,0 +1,34 @@
+== 各語系條數（strings+plurals+arrays 的 key 數）==
+  zh-rTW    465 + 8 + 2 = 475
+  zh-rHK    465 + 8 + 2 = 475
+  zh-rCN    465 + 8 + 2 = 475
+  de        465 + 8 + 2 = 475
+  es        465 + 8 + 2 = 475
+  pl        465 + 8 + 2 = 475
+  pt-rBR    465 + 8 + 2 = 475
+  ru        465 + 8 + 2 = 475
+  tr        465 + 8 + 2 = 475
+  default   465 + 8 + 5 = 478  （其中 3 個陣列是 entryValues，屬技術值刻意不進 locale 檔）
+
+ERROR 0 件、WARN 21 件
+  [W] zh-rTW: common_google_play_services_enable_title 短文案偏長（17 字）：'啟用 Google Play 服務'
+  [W] zh-rTW: common_google_play_services_install_title 短文案偏長（17 字）：'取得 Google Play 服務'
+  [W] zh-rTW: common_google_play_services_update_title 短文案偏長（17 字）：'更新 Google Play 服務'
+  [W] zh-rTW: pref_library_folder_custom_summary 短文案偏長（17 字）：'僅從指定資料夾（及子資料夾）新增書'
+  [W] zh-rTW: pref_sync_enabled_title 短文案偏長（17 字）：'與 Google Drive 同步'
+  [W] zh-rTW: pref_sync_summary 短文案偏長（112 字）：'"同步功能會使用你的 Google Drive 帳號，在各裝置間備份並同步你的閱讀位置、螢光標記、筆記、書籤和其他資料。\n\n書本身目前不會備份或同步。\n\n此功能佔用的空間會算入你的 Google Drive 儲存空間額度。"'
+  [W] zh-rHK: common_google_play_services_enable_title 短文案偏長（17 字）：'啟用 Google Play 服務'
+  [W] zh-rHK: common_google_play_services_install_title 短文案偏長（17 字）：'取得 Google Play 服務'
+  [W] zh-rHK: common_google_play_services_update_title 短文案偏長（17 字）：'更新 Google Play 服務'
+  [W] zh-rHK: pref_library_folder_custom_summary 短文案偏長（17 字）：'僅從指定資料夾（及子資料夾）新增書'
+  [W] zh-rHK: pref_sync_enabled_title 短文案偏長（17 字）：'與 Google Drive 同步'
+  [W] zh-rHK: pref_sync_summary 短文案偏長（112 字）：'"同步功能會使用你的 Google Drive 帳號，在各裝置間備份並同步你的閱讀位置、螢光標記、筆記、書籤和其他資料。\n\n書本身目前不會備份或同步。\n\n此功能佔用的空間會算入你的 Google Drive 儲存空間額度。"'
+  [W] zh-rCN: common_google_play_services_enable_title 短文案偏長（17 字）：'启用 Google Play 服务'
+  [W] zh-rCN: common_google_play_services_install_title 短文案偏長（17 字）：'获取 Google Play 服务'
+  [W] zh-rCN: common_google_play_services_update_title 短文案偏長（17 字）：'更新 Google Play 服务'
+  [W] zh-rCN: pref_library_folder_custom_summary 短文案偏長（16 字）：'只从指定文件夹及其子文件夹添加书'
+  [W] zh-rCN: pref_sync_enabled_title 短文案偏長（18 字）：'通过 Google Drive 同步'
+  [W] zh-rCN: pref_sync_summary 短文案偏長（105 字）：'"同步会用你的 Google Drive 账户，备份你的阅读位置、荧光标记、笔记和其他数据，并在你的各设备间保持同步。\n\n书本身暂不备份或同步。\n\n此功能占用的空间会计入你的 Google Drive 容量。"'
+  [W] de: theme_preview_text 原文用雙引號保留首尾空格，譯文未沿用：'It is something to have been a'
+  [W] pl: theme_preview_text 原文用雙引號保留首尾空格，譯文未沿用：'It is something to have been a'
+  [W] pt-rBR: theme_preview_text 原文用雙引號保留首尾空格，譯文未沿用：'It is something to have been a'

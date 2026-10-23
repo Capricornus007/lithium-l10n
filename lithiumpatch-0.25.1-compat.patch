@@ -1,0 +1,578 @@
+diff --git a/main.go b/main.go
+index fa5815f..d2d3c5d 100644
+--- a/main.go
++++ b/main.go
+@@ -214,9 +214,16 @@ func run(ctx context.Context) error {
+ 	fmt.Println()
+ 
+ 	fmt.Printf("> Signing APK %q to %q\n", apkPatched, *Output)
++	// 2026-10-23 修正：原本固定用 --min-sdk-version 26，apksigner 因此「不會」產生 v1
++	// （JAR）簽章。依本机規則，自家公開發布的 APK 一律 v1+v2+v3 全開，
++	// 驗證時也要用 `apksigner verify -v --min-sdk-version 21` 才不會把好的包誤判成壞包。
+ 	if err := jar(ctx,
+ 		*Apksigner, "sign",
+-		"--min-sdk-version", "26",
++		"--min-sdk-version", "21",
++		"--max-sdk-version", "10000",
++		"--v1-signing-enabled", "true",
++		"--v2-signing-enabled", "true",
++		"--v3-signing-enabled", "true",
+ 		"--ks", *Keystore,
+ 		"--ks-pass", "pass:"+*KeystorePassphrase,
+ 		"--pass-encoding", "utf-8",
+diff --git a/patches/coversize.go b/patches/coversize.go
+index eacaade..db69650 100644
+--- a/patches/coversize.go
++++ b/patches/coversize.go
+@@ -24,8 +24,10 @@ func init() {
+ 			),
+ 		),
+ 		// the base width to determine the number of columns is set in code like AutoFitRecyclerView.setSpanWidth(bookshelf_cover_width)
++		// 2026-10-23 修正：Lithium 0.25.1 重新編譯後這段碼的 `.line` 由 168 變 169，
++		// 原本的 MustContain 逐字比對會失敗，改用忽略行號的 MustContainSmali。
+ 		PatchFile("smali/com/faultexception/reader/BooksFragment.smali",
+-			MustContain(
++			MustContainSmali(
+ 				FixIndent("\n"+`
+ 					invoke-virtual {v2, v3}, Landroid/content/res/Resources;->getDimension(I)F
+ 				
+@@ -104,7 +106,7 @@ func init() {
+ 		PatchFile("smali/com/faultexception/reader/widget/AutoFitRecyclerView.smali",
+ 			InMethod("onMeasure(II)V",
+ 				// never add padding to the sides of the grid layout (rather than padding it based on the leftover after fitting in as many as possible)
+-				MustContain(
++				MustContainSmali(
+ 					FixIndent("\n"+`
+ 						:cond_2
+ 						iget p1, p0, Lcom/faultexception/reader/widget/AutoFitRecyclerView;->mPaddingLeft:I
+diff --git a/patches/extrathemes.go b/patches/extrathemes.go
+index f6aad4c..4639692 100644
+--- a/patches/extrathemes.go
++++ b/patches/extrathemes.go
+@@ -46,7 +46,7 @@ func (ts extrathemes) Do(apk string, diffwriter io.Writer) error {
+ 	}
+ 	if err := PatchFile("smali/com/faultexception/reader/db/ThemesTable.smali",
+ 		InMethod("<clinit>()V",
+-			ReplaceString(
++			ReplaceStringSmali(
+ 				FixIndent("\n"+`
+ 					const/4 v1, 0x3
+ 
+diff --git a/patches/fullbleed.go b/patches/fullbleed.go
+index 7821557..f36502a 100644
+--- a/patches/fullbleed.go
++++ b/patches/fullbleed.go
+@@ -4,7 +4,11 @@
+ // display cutout area.
+ package patches
+ 
+-import . "github.com/pgaskin/lithiumpatch/patches/patchdef"
++import (
++	"regexp"
++
++	. "github.com/pgaskin/lithiumpatch/patches/patchdef"
++)
+ 
+ func init() {
+ 	Register("fullbleed",
+@@ -17,9 +21,14 @@ func init() {
+ 		PatchFile("smali/com/faultexception/reader/ReaderActivity.smali",
+ 			InMethod("onCreate(Landroid/os/Bundle;)V",
+ 				// if mFullscreenEnabled and api 28
+-				MustContain("\n"+`    const/4 v0, 0x1`), // LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
++				//
++				// 2026-10-23 修正：Lithium 0.25.1 重新編譯後這段碼用到的暫存器從 v0 變成 v2
++				// （d8 的暫存器配置會隨版本漂移），原本逐字比對 `const/4 v0, 0x1` 會失敗。
++				// 這裡只要求「onCreate 內確實把 0x1 載入某個暫存器」，暫存器名稱不寫死。
++				MustContainRe(regexp.MustCompile(`(?m)^    const/4 v[0-9]+, 0x1$`)), // LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+ 				// note: d8 moves the layoutInDisplayCutoutMode iput into a synthetic api model class
+-				MustContain("\n"+`    invoke-static {v2, v0}, Lcom/bumptech/glide/util/LogTime$$ExternalSyntheticApiModelOutline0;->m(Landroid/view/WindowManager$LayoutParams;I)V`),
++				// 同上，desugaring 產出的 Outline 類別名與暫存器都會漂移，改用正規表達式匹配。
++				MustContainRe(regexp.MustCompile(`invoke-static \{v[0-9]+, v[0-9]+\}, Lcom/bumptech/glide/util/LogTime\$\$ExternalSyntheticApiModelOutline[0-9]+;->m\(Landroid/view/WindowManager\$LayoutParams;I\)V`)),
+ 			),
+ 			InMethod("setTheme(Lcom/faultexception/reader/themes/Theme;)V",
+ 				ReplaceStringAppend(
+diff --git a/patches/hyphenation.go b/patches/hyphenation.go
+index b53de5a..e658376 100644
+--- a/patches/hyphenation.go
++++ b/patches/hyphenation.go
+@@ -4,7 +4,11 @@
+ // disabled unless the book contained styles to enable it (which is not common).
+ package patches
+ 
+-import . "github.com/pgaskin/lithiumpatch/patches/patchdef"
++import (
++	"regexp"
++
++	. "github.com/pgaskin/lithiumpatch/patches/patchdef"
++)
+ 
+ func init() {
+ 	Register("hyphenation",
+@@ -139,23 +143,18 @@ func init() {
+ 				.end method
+ 				`),
+ 			),
++			// 2026-10-23 修正：這段在 0.25.1 裡暫存器從 v3/v5 變成 v2/v4（d8 的配置會隨版本漂移），
++			// 原本寫死暫存器的逐字比對會失敗、而且寫死暫存器的插入碼還會蓋掉別人在用的值。
++			// 改用捕获群把原文用的暫存器名「抄」過來，0.25.0／0.25.1 都適用。
+ 			InMethod("prepareContentStream(Ljava/io/InputStream;)Ljava/io/InputStream;",
+-				ReplaceStringPrepend(
+-					FixIndent("\n"+`
+-						const-string v3, ");   LithiumJs.setTextAlign("
+-
+-						invoke-virtual {v5, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-						iget v3, p0, Lcom/faultexception/reader/content/HtmlContentWebView;->mTextAlign:I
+-
+-						invoke-virtual {v5, v3}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+-					`),
+-					FixIndent("\n"+`
+-						const-string v3, ");   LithiumJs.setHyphenation("
+-						invoke-virtual {v5, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-						iget-boolean v3, p0, Lcom/faultexception/reader/content/HtmlContentWebView;->mHyphenation:Z
+-						invoke-virtual {v5, v3}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+-					`),
++				ReplaceStringRePrepend(
++					regexp.MustCompile(`    const-string (v\d+), "\);   LithiumJs\.setTextAlign\("\n\n    invoke-virtual \{(v\d+), v\d+\}, Ljava/lang/StringBuilder;->append\(Ljava/lang/String;\)Ljava/lang/StringBuilder;\n\n    iget v\d+, p0, Lcom/faultexception/reader/content/HtmlContentWebView;->mTextAlign:I\n\n    invoke-virtual \{v\d+, v\d+\}, Ljava/lang/StringBuilder;->append\(I\)Ljava/lang/StringBuilder;`),
++					// 注意：這裡必須是真的換行（\n 直譯字串），不能用反引號 raw string，
++					// 否則 \n 會變成「反斜線 + n」兩個字元，組譯器會報 Invalid text。
++					"    const-string $1, \");   LithiumJs.setHyphenation(\"\n\n"+
++						"    invoke-virtual {$2, $1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;\n\n"+
++						"    iget-boolean $1, p0, Lcom/faultexception/reader/content/HtmlContentWebView;->mHyphenation:Z\n\n"+
++						"    invoke-virtual {$2, $1}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;\n\n",
+ 				),
+ 			),
+ 		),
+diff --git a/patches/invertcontent.go b/patches/invertcontent.go
+index 1558cb1..1b03342 100644
+--- a/patches/invertcontent.go
++++ b/patches/invertcontent.go
+@@ -4,6 +4,7 @@
+ package patches
+ 
+ import (
++	"fmt"
+ 	"regexp"
+ 
+ 	. "github.com/pgaskin/lithiumpatch/patches/patchdef"
+@@ -318,40 +319,48 @@ func init() {
+ 			),
+ 		),
+ 
+-		PatchFile("smali/com/faultexception/reader/ReaderActivity$7.smali",
+-			InMethod("onTextAlignChanged(I)V",
+-				// access$1000 is the synthetic getter for ReaderActivity.mBookView
+-				MustContain(
+-					FixIndent(`
+-						invoke-static {v0}, Lcom/faultexception/reader/ReaderActivity;->access$1000(Lcom/faultexception/reader/ReaderActivity;)Lcom/faultexception/reader/content/BookView;
+-					`),
+-				),
+-			),
+-			ReplaceStringPrepend(
+-				FixIndent(`
+-				.method public onTextAlignChanged(I)V
+-				`),
+-				FixIndent(`
+-				.method public onContentInvertChanged(Ljava/lang/String;)V
+-					.locals 1
+-
+-					iget-object v0, p0, Lcom/faultexception/reader/ReaderActivity$7;->this$0:Lcom/faultexception/reader/ReaderActivity;
+-					invoke-static {v0}, Lcom/faultexception/reader/ReaderActivity;->access$1000(Lcom/faultexception/reader/ReaderActivity;)Lcom/faultexception/reader/content/BookView;
+-					move-result-object v0
+-					if-eqz v0, :cond_0
++		// 2026-10-23 修正：Lithium 0.25.1 把 DisplaySettingsFragment 的監聽器匿名內部類別
++		// 從 ReaderActivity$7 挪到 ReaderActivity$8（$7 變成 BookView$Callbacks 的子類），
++		// 而且 mBookView 的合成取用器從 access$1000 變成 access$1100。
++		// 因此這裡不再寫死檔名／類別名／取用器名，改用 PatchInnerClass 動態定位。
++		PatchInnerClass("com/faultexception/reader/ReaderActivity", "onTextAlignChanged(I)V",
++			func(ic *InnerClass) []StringPatcher {
++				acc, err := ic.Accessor("com/faultexception/reader/ReaderActivity", "com/faultexception/reader/content/BookView")
++				if err != nil {
++					// 找不到取用器就直接讓 patch 失敗，不要默默插入錯的程式碼
++					return []StringPatcher{StringPatcherFunc(func(x string) (string, error) { return x, err })}
++				}
++				return []StringPatcher{
++					// access$NN00 is the synthetic getter for ReaderActivity.mBookView
++					InMethod("onTextAlignChanged(I)V",
++						MustContainRe(regexp.MustCompile(`invoke-static \{v\d+\}, Lcom/faultexception/reader/ReaderActivity;->`+regexp.QuoteMeta(acc)+`\(Lcom/faultexception/reader/ReaderActivity;\)Lcom/faultexception/reader/content/BookView;`)),
++					),
++					ReplaceStringPrepend(
++						FixIndent(`
++						.method public onTextAlignChanged(I)V
++						`),
++						FixIndent(fmt.Sprintf(`
++					.method public onContentInvertChanged(Ljava/lang/String;)V
++						.locals 1
++
++						iget-object v0, p0, %[1]s->this$0:Lcom/faultexception/reader/ReaderActivity;
++						invoke-static {v0}, Lcom/faultexception/reader/ReaderActivity;->%[2]s(Lcom/faultexception/reader/ReaderActivity;)Lcom/faultexception/reader/content/BookView;
++						move-result-object v0
++						if-eqz v0, :cond_0
+ 
+-					iget-object v0, p0, Lcom/faultexception/reader/ReaderActivity$7;->this$0:Lcom/faultexception/reader/ReaderActivity;
+-					invoke-static {v0}, Lcom/faultexception/reader/ReaderActivity;->access$1000(Lcom/faultexception/reader/ReaderActivity;)Lcom/faultexception/reader/content/BookView;
+-					move-result-object v0
+-					invoke-virtual {v0, p1}, Lcom/faultexception/reader/content/BookView;->setContentInvert(Ljava/lang/String;)V
++						iget-object v0, p0, %[1]s->this$0:Lcom/faultexception/reader/ReaderActivity;
++						invoke-static {v0}, Lcom/faultexception/reader/ReaderActivity;->%[2]s(Lcom/faultexception/reader/ReaderActivity;)Lcom/faultexception/reader/content/BookView;
++						move-result-object v0
++						invoke-virtual {v0, p1}, Lcom/faultexception/reader/content/BookView;->setContentInvert(Ljava/lang/String;)V
+ 
+-					:cond_0
+-					return-void
+-				.end method
++						:cond_0
++						return-void
++					.end method
+ 
+-				`),
+-			),
+-		),
++					`, ic.Class, acc)),
++					),
++				}
++			}),
+ 
+ 		PatchFile("smali/com/faultexception/reader/content/BookView.smali",
+ 			ReplaceStringAppend(
+@@ -439,20 +448,19 @@ func init() {
+ 				"\n"+`.field private mTextAlign:I`,
+ 				"\n"+`.field private mContentInvert:Ljava/lang/String;`,
+ 			),
+-			ReplaceStringPrepend(
+-				FixIndent(`
+-					const-string v3, "</script><style type=\'text/css\' id=\'__LithiumThemeStyle\'></style>"
+-
+-					invoke-virtual {v5, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-				`),
+-				FixIndent(`
+-					const-string v3, "document.addEventListener('DOMContentLoaded', function() { LithiumJs.setContentInvert('"
+-					invoke-virtual {v5, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-					iget-object v3, p0, Lcom/faultexception/reader/content/HtmlContentWebView;->mContentInvert:Ljava/lang/String;
+-					invoke-virtual {v5, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-					const-string v3, "');});"
+-					invoke-virtual {v5, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-				`),
++			// 2026-10-23 修正：0.25.1 這段暫存器從 v3/v5 變成 v2/v4，改成用捕获群跟隨原文。
++			// 模板必須用「直譯字串」（真換行）：raw 反引號字串裡的 \n 是反斜線加 n 兩個字元，
++			// 會讓 smali 組譯器報 Error for input '\'：Invalid text。
++			// 比對從 const-string 開始（原本的縮排不在匹配範圍內），
++			// 因此首行不縮排、尾端補 "\n\n    " 還原原文縮排。
++			ReplaceStringRePrepend(
++				regexp.MustCompile(`const-string (v\d+), "</script><style type=\\'text/css\\' id=\\'__LithiumThemeStyle\\'></style>"\n\n    invoke-virtual \{(v\d+), v\d+\}, Ljava/lang/StringBuilder;->append\(Ljava/lang/String;\)Ljava/lang/StringBuilder;`),
++				"const-string $1, \"document.addEventListener('DOMContentLoaded', function() { LithiumJs.setContentInvert('\"\n\n"+
++					"    invoke-virtual {$2, $1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;\n\n"+
++					"    iget-object $1, p0, Lcom/faultexception/reader/content/HtmlContentWebView;->mContentInvert:Ljava/lang/String;\n\n"+
++					"    invoke-virtual {$2, $1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;\n\n"+
++					"    const-string $1, \"');});\"\n\n"+
++					"    invoke-virtual {$2, $1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;\n\n    ",
+ 			),
+ 			ReplaceStringPrepend(
+ 				FixIndent(`
+diff --git a/patches/moretoolbaractions.go b/patches/moretoolbaractions.go
+index 036071b..15e0695 100644
+--- a/patches/moretoolbaractions.go
++++ b/patches/moretoolbaractions.go
+@@ -4,19 +4,27 @@
+ // or screen size.
+ package patches
+ 
+-import . "github.com/pgaskin/lithiumpatch/patches/patchdef"
++import (
++	"regexp"
++
++	. "github.com/pgaskin/lithiumpatch/patches/patchdef"
++)
+ 
+ func init() {
++	// 2026-10-23 修正：Lithium 0.25.1 上游自己已經把「搜尋」改成 showAsAction="always"，
++	// 原本逐字比對 ifRoom 的 patch 因此整段失效。這裡改成容許 ifRoom|always 兩種來源值、
++	// 一律換成 always（對 0.25.0 與 0.25.1 都正確，而且可重複執行）。
++	item := func(name string) StringPatcher {
++		return ReplaceStringReLiteral(
++			regexp.MustCompile(`android:title="@string/`+name+`" app:showAsAction="(?:ifRoom|always)"`),
++			`android:title="@string/`+name+`" app:showAsAction="always"`,
++		)
++	}
++
+ 	Register("moretoolbaractions",
+ 		PatchFile("res/menu/reader.xml",
+-			ReplaceString(
+-				`android:title="@string/action_search" app:showAsAction="ifRoom"`,
+-				`android:title="@string/action_search" app:showAsAction="always"`,
+-			),
+-			ReplaceString(
+-				`android:title="@string/action_add_bookmark" app:showAsAction="ifRoom"`,
+-				`android:title="@string/action_add_bookmark" app:showAsAction="always"`,
+-			),
++			item("action_search"),
++			item("action_add_bookmark"),
+ 		),
+ 	)
+ }
+diff --git a/patches/patchdef/patch.go b/patches/patchdef/patch.go
+index f3a50d3..de86e38 100644
+--- a/patches/patchdef/patch.go
++++ b/patches/patchdef/patch.go
+@@ -245,6 +245,216 @@ func MustContain(s string) StringPatcher {
+ 	})
+ }
+ 
++// ---------- 版本容錯輔助（本輪為讓 patch 同時適用於 Lithium 0.25.0 / 0.25.1 而加）----------
++//
++// 上游小版本重新編譯後，smali 會產生兩種「非語意」的漂移：
++//   1. `.line NN` 行號整體位移（0.25.0 → 0.25.1 幾乎每個檔案都有）；
++//   2. 暫存器配置改變（v0/v2/v5 之類）與匿名內部類別編號改變（ReaderActivity$7 → $8）、
++//      合成取用器編號改變（access$1000 → access$1100）。
++// 原本 patch 全部用逐字比對，於是 1 就讓 31 個 patch 中的 7 個失效。
++// 下面的 helper 只放寬「比對」，不放寬「取代內容」，因此不會無聲地貼錯程式碼。
++
++var smaliLineRe = regexp.MustCompile(`\\\.line [0-9]+`)
++
++// smaliPattern 把一段 smali 文字轉成正規表達式：其中的 `.line NN` 可對應任意行號，
++// 其餘字元全部原樣比對（暫存器名稱仍然要求一致，避免匹配到錯誤位置）。
++func smaliPattern(literal string) (*regexp.Regexp, error) {
++	return regexp.Compile(smaliLineRe.ReplaceAllString(regexp.QuoteMeta(literal), `\.line [0-9]+`))
++}
++
++// MustContainSmali 只確認 smali 區塊存在（忽略 `.line` 行號），不做任何修改。
++func MustContainSmali(find string) StringPatcher {
++	return StringPatcherFunc(func(x string) (string, error) {
++		re, err := smaliPattern(find)
++		if err != nil {
++			return x, fmt.Errorf("invalid smali pattern: %w", err)
++		}
++		if !re.MatchString(x) {
++			return x, fmt.Errorf("could not find smali block (ignoring .line numbers):\n%s", find)
++		}
++		return x + "\n", nil // 與 MustContain 相同的 hack，讓它可以用在 InMethod 裡
++	})
++}
++
++// ReplaceStringSmali 以「忽略 `.line` 行號」的方式比對 find，並把比對到的整段換成 replace
++// （等同 ReplaceString 的語意；原本的 `.line` 會一併被換掉，不影響執行）。
++func ReplaceStringSmali(find, replace string) StringPatcher {
++	return StringPatcherFunc(func(x string) (string, error) {
++		re, err := smaliPattern(find)
++		if err != nil {
++			return x, fmt.Errorf("invalid smali pattern: %w", err)
++		}
++		out := spliceAll(re, x, func(string) string { return replace })
++		if out == x {
++			return x, fmt.Errorf("could not find smali block (ignoring .line numbers):\n%s", find)
++		}
++		return out, nil
++	})
++}
++
++// ReplaceStringPrependSmali 同 ReplaceStringSmali，但保留比對到的原文、把 replace 加在它前面。
++func ReplaceStringPrependSmali(find, replace string) StringPatcher {
++	return StringPatcherFunc(func(x string) (string, error) {
++		re, err := smaliPattern(find)
++		if err != nil {
++			return x, fmt.Errorf("invalid smali pattern: %w", err)
++		}
++		out := spliceAll(re, x, func(m string) string { return replace + m })
++		if out == x {
++			return x, fmt.Errorf("could not find smali block (ignoring .line numbers):\n%s", find)
++		}
++		return out, nil
++	})
++}
++
++// ReplaceStringAppendSmali 同 ReplaceStringPrependSmali，但加在比對到的原文後面。
++func ReplaceStringAppendSmali(find, replace string) StringPatcher {
++	return StringPatcherFunc(func(x string) (string, error) {
++		re, err := smaliPattern(find)
++		if err != nil {
++			return x, fmt.Errorf("invalid smali pattern: %w", err)
++		}
++		out := spliceAll(re, x, func(m string) string { return m + replace })
++		if out == x {
++			return x, fmt.Errorf("could not find smali block (ignoring .line numbers):\n%s", find)
++		}
++		return out, nil
++	})
++}
++
++// spliceAll 把 re 在 s 中的每個匹配交辦給 f 產生取代文字（手動拼接，
++// 不用 ReplaceAllString，避免 smali 內容中的 `$id`、`$ScrollingViewBehavior` 等
++// 被當成正規表達式群組參照而吃掉字元）。
++func spliceAll(re *regexp.Regexp, s string, f func(match string) string) string {
++	var b strings.Builder
++	last := 0
++	for _, loc := range re.FindAllStringIndex(s, -1) {
++		b.WriteString(s[last:loc[0]])
++		b.WriteString(f(s[loc[0]:loc[1]]))
++		last = loc[1]
++	}
++	b.WriteString(s[last:])
++	return b.String()
++}
++
++// MustContainRe 用正規表達式確認內容存在（用來比對「暫存器名稱會漂」的指令行）。
++func MustContainRe(find *regexp.Regexp) StringPatcher {
++	return StringPatcherFunc(func(x string) (string, error) {
++		if !find.MatchString(x) {
++			return x, fmt.Errorf("could not match %q", find.String())
++		}
++		return x + "\n", nil
++	})
++}
++
++// ReplaceStringRePrepend 用正規表達式比對，保留「實際匹配到的原文」，
++// 並在它前面插入 tmpl 展開後的文字；tmpl 中的 $1、$2 是正規表達式的捕获群。
++//
++// 為什麼需要它：d8 編譯器在不同版本之間會把同一段 Java 程式碼配置到不同的暫存器
++// （例：Lithium 0.25.0 用 v3/v5，0.25.1 改成 v2/v4）。把暫存器名字寫死的 patch
++// 升版就會失配；用捕获群把暫存器名字「抄過來」，插入的程式碼才會跟著對上。
++func ReplaceStringRePrepend(re *regexp.Regexp, tmpl string) StringPatcher {
++	return StringPatcherFunc(func(x string) (string, error) {
++		idx := re.FindAllStringSubmatchIndex(x, -1)
++		if len(idx) == 0 {
++			return x, fmt.Errorf("could not match %q", re.String())
++		}
++		var b strings.Builder
++		last := 0
++		for _, m := range idx {
++			b.WriteString(x[last:m[0]])
++			b.WriteString(string(re.ExpandString(nil, tmpl, x, m)))
++			b.WriteString(x[m[0]:m[1]])
++			last = m[1]
++		}
++		b.WriteString(x[last:])
++		return b.String(), nil
++	})
++}
++
++// InnerClass 記載「動態找到的匿名內部類別」。
++type InnerClass struct {
++	Path  string // 解包目錄下的相對路徑，例 smali/com/faultexception/reader/ReaderActivity$8.smali
++	Class string // 類別描述符，例 Lcom/faultexception/reader/ReaderActivity$8;
++	Data  string // 該檔案內容
++}
++
++// Accessor 從找到的類別內容中，解析出外層類別的合成取用器名稱
++// （例：`access$1100`），簽名形如 L<outer>;->access$N(L<outer>;)L<returnDesc>;。
++// 上游小版本會讓這個編號漂移，所以一律動態解析、不寫死。
++func (i *InnerClass) Accessor(outer, returnDesc string) (string, error) {
++	re := regexp.MustCompile(`L` + regexp.QuoteMeta(outer) + `;->(access\$\d+)\(L` + regexp.QuoteMeta(outer) + `;\)L` + regexp.QuoteMeta(returnDesc) + `;`)
++	m := re.FindStringSubmatch(i.Data)
++	if m == nil {
++		return "", fmt.Errorf("no synthetic accessor for %q returning %q in %s", outer, returnDesc, i.Path)
++	}
++	return m[1], nil
++}
++
++type innerClassInst struct {
++	Outer  string // 例 com/faultexception/reader/ReaderActivity
++	Method string // 例 onTextAlignChanged(I)V
++	Make   func(*InnerClass) []StringPatcher
++}
++
++// PatchInnerClass 在外層類別的匿名內部類別中，找出「實作了 method 的那一顆」再套用 patcher。
++// 因為上游小版本會讓 $7/$8 這種編號漂移，寫死路徑的 patch 會在升版後整段失效。
++func PatchInnerClass(outer, method string, mk func(*InnerClass) []StringPatcher) Instruction {
++	return &innerClassInst{outer, method, mk}
++}
++
++func (i *innerClassInst) Do(apk string, diffwriter io.Writer) error {
++	methodRe := regexp.MustCompile(`(?m)^\.method [^\n]*` + regexp.QuoteMeta(i.Method))
++
++	var found []*InnerClass
++	subs, err := filepath.Glob(filepath.Join(apk, "smali*"))
++	if err != nil {
++		return err
++	}
++	for _, sub := range subs {
++		st, err := os.Stat(sub)
++		if err != nil || !st.IsDir() {
++			continue
++		}
++		// apktool 可能解出 smali/ 與 smali_classes2/，兩邊都要找
++		root := filepath.ToSlash(strings.TrimPrefix(sub, apk+string(os.PathSeparator)))
++		matches, err := filepath.Glob(filepath.Join(sub, filepath.FromSlash(i.Outer)+"$*.smali"))
++		if err != nil {
++			return err
++		}
++		for _, m := range matches {
++			// 只接受解包目錄底下的檔案，避免路徑跑到目錄外
++			clean := filepath.Clean(m)
++			if !strings.HasPrefix(clean, filepath.Clean(sub)+string(os.PathSeparator)) {
++				continue
++			}
++			data, err := os.ReadFile(clean)
++			if err != nil {
++				return err
++			}
++			s := strings.ReplaceAll(string(data), "\r\n", "\n")
++			if !methodRe.MatchString(s) {
++				continue
++			}
++			relPath := filepath.ToSlash(strings.TrimPrefix(clean, apk+string(os.PathSeparator)))
++			cls := "L" + strings.TrimSuffix(strings.TrimPrefix(relPath, root+"/"), ".smali") + ";"
++			found = append(found, &InnerClass{Path: relPath, Class: cls, Data: s})
++		}
++	}
++	if len(found) == 0 {
++		return fmt.Errorf("no inner class of %s implementing %q found", i.Outer, i.Method)
++	}
++	if len(found) > 1 {
++		var names []string
++		for _, f := range found {
++			names = append(names, f.Class)
++		}
++		return fmt.Errorf("ambiguous inner classes implementing %q: %s", i.Method, strings.Join(names, ", "))
++	}
++	ic := found[0]
++	return PatchFile(ic.Path, i.Make(ic)...).Do(apk, diffwriter)
++}
++
+ func inMethod(method string, pt StringPatcher) StringPatcher {
+ 	return StringPatcherFunc(func(smali string) (string, error) {
+ 		lines := strings.Split(smali, "\n")
+diff --git a/patches/pseudomat3.go b/patches/pseudomat3.go
+index 0009021..37a785e 100644
+--- a/patches/pseudomat3.go
++++ b/patches/pseudomat3.go
+@@ -67,7 +67,7 @@ func init() {
+ 			),
+ 		),
+ 		PatchFile("smali/com/faultexception/reader/BooksFragment.smali",
+-			MustContain(
++			MustContainSmali(
+ 				FixIndent("\n"+`
+ 					iget-object p1, p0, Lcom/faultexception/reader/BooksFragment;->mContext:Landroid/content/Context;
+ 
+@@ -79,7 +79,7 @@ func init() {
+ 					move-result p1
+ 				`),
+ 			),
+-			MustContain(
++			MustContainSmali(
+ 				FixIndent("\n"+`
+ 					invoke-virtual {v2, v3}, Landroid/content/res/Resources;->getDimension(I)F
+ 
+@@ -109,7 +109,7 @@ func init() {
+ 		// don't darken status bar color in reader
+ 		PatchFile("smali/com/faultexception/reader/ReaderActivity.smali",
+ 			InMethod("applyChromeColor()V",
+-				ReplaceString(
++				ReplaceStringSmali(
+ 					FixIndent("\n"+`
+ 						invoke-static {v0}, Landroid/graphics/Color;->blue(I)I
+ 
+diff --git a/patches/seriesdrawer.go b/patches/seriesdrawer.go
+index f354e57..482a812 100644
+--- a/patches/seriesdrawer.go
++++ b/patches/seriesdrawer.go
+@@ -607,7 +607,7 @@ func seriesdrawer() {
+ 
+ 					goto :goto_0
+ 				`)),
+-				ReplaceStringPrepend(
++				ReplaceStringPrependSmali(
+ 					FixIndent("\n"+`
+ 						const/4 v3, 0x2
+ 

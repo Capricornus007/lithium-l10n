@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_screen_rotation_keys">
+        <item>Apagado</item>
+        <item>Vertical</item>
+        <item>Horizontal</item>
+    </string-array>
+    <string-array name="pref_volume_pagination_keys">
+        <item>Apagado</item>
+        <item>Encendido</item>
+        <item>Reverso</item>
+    </string-array>
+</resources>

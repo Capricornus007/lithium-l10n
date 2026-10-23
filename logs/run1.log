@@ -1,0 +1,43 @@
+> Loading extra fonts
+... Caladea (Caladea) [Latin] {Regular,Bold,Italic,BoldItalic}
+... Charis SIL (CharisSIL) [Latin|Cyrillic] {Regular,Bold,Italic,BoldItalic}
+... Gentium (Gentium) [Latin|Cyrillic|Greek] {Regular,Bold,Italic,BoldItalic}
+... Gentium Book (GentiumBook) [Latin|Cyrillic|Greek] {Regular,Bold,Italic,BoldItalic}
+... Kanit (Kanit) [Thai] {Regular,Bold,Italic,BoldItalic}
+... Literata (Literata) [Latin|Cyrillic|Greek] {Regular,Bold,Italic,BoldItalic}
+... Noto Sans Thai (NotoSansThai) [Thai] {Regular,Bold}
+... Sarabun (Sarabun) [Thai] {Regular,Bold,Italic,BoldItalic}
+... Source Serif 4 (SourceSerif) [Latin|Cyrillic|Greek] {Regular,Bold,Italic,BoldItalic}
+... Spectral (Spectral) [Latin|Cyrillic] {Regular,Bold,Italic,BoldItalic}
+
+> Parsing dictionaries
+... webster1913 (124055 terms, 113183 entries)
+
+> Creating temp dirs
+
+> Looking for keystore "/home/avatar/Downloads/lithium-l10n/build-0.25.2/lithiumpatch/default.jks"
+
+> Reading keystore "/home/avatar/Downloads/lithium-l10n/build-0.25.2/lithiumpatch/default.jks"
+Found default signing key. This is insecure and will not support sync. You can specify a custom keystore using the --keystore option.
+
+> Decompiling APK "upstream-106.apk" to "/tmp/lithiumpatch3890155667/dis"
+Picked up JAVA_TOOL_OPTIONS: -Xmx3g
+I: Using Apktool 3.0.3 on upstream-106.apk with 8 threads
+I: Loading resource table...
+I: Baksmaling classes2.dex...
+I: Baksmaling classes.dex...
+I: Decoding value resources...
+I: Loading resource table from file: /home/avatar/.local/share/apktool/framework/1.apk
+I: Decoding file resources...
+I: Generating values XMLs...
+I: Decoding AndroidManifest.xml with resources...
+I: Copying original files...
+I: Copying assets...
+I: Copying unknown files...
+
+> Patching
+[1/31] cleanupunused
+[2/31] color
+[3/31] coversize
+> Cleaning up /tmp/lithiumpatch3890155667
+error: apply patch "coversize": apply patch "coversize": inst 2: patch "smali/com/faultexception/reader/BooksFragment.smali": patcher 0: could not find "\n    invoke-virtual {v2, v3}, Landroid/content/res/Resources;->getDimension(I)F\n\n    move-result v2\n\n    float-to-int v2, v2\n\n    add-int/2addr v2, p1\n\n    .line 168\n    invoke-virtual {v0, v2}, Lcom/faultexception/reader/widget/AutoFitRecyclerView;->setSpanWidth(I)V\n"

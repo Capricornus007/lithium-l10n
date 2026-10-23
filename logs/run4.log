@@ -1,0 +1,92 @@
+> Loading extra fonts
+... Caladea (Caladea) [Latin] {Regular,Bold,Italic,BoldItalic}
+... Charis SIL (CharisSIL) [Latin|Cyrillic] {Regular,Bold,Italic,BoldItalic}
+... Gentium (Gentium) [Latin|Cyrillic|Greek] {Regular,Bold,Italic,BoldItalic}
+... Gentium Book (GentiumBook) [Latin|Cyrillic|Greek] {Regular,Bold,Italic,BoldItalic}
+... Kanit (Kanit) [Thai] {Regular,Bold,Italic,BoldItalic}
+... Literata (Literata) [Latin|Cyrillic|Greek] {Regular,Bold,Italic,BoldItalic}
+... Noto Sans Thai (NotoSansThai) [Thai] {Regular,Bold}
+... Sarabun (Sarabun) [Thai] {Regular,Bold,Italic,BoldItalic}
+... Source Serif 4 (SourceSerif) [Latin|Cyrillic|Greek] {Regular,Bold,Italic,BoldItalic}
+... Spectral (Spectral) [Latin|Cyrillic] {Regular,Bold,Italic,BoldItalic}
+
+> Parsing dictionaries
+... webster1913 (124055 terms, 113183 entries)
+
+> Creating temp dirs
+
+> Looking for keystore "/home/avatar/.android/lithium-l10n.keystore"
+
+> Reading keystore "/home/avatar/.android/lithium-l10n.keystore"
+Found key with signature 1B:B4:C8:F4:D6:6F:12:89:F4:7C:E2:34:94:7B:BE:0A:D4:A9:DA:3F. This will need to be added as Google APIs app with access to the Drive API for sync to work.
+
+> Decompiling APK "upstream-106.apk" to "/tmp/lithiumpatch253475902/dis"
+Picked up JAVA_TOOL_OPTIONS: -Xmx4g
+I: Using Apktool 3.0.3 on upstream-106.apk with 8 threads
+I: Loading resource table...
+I: Baksmaling classes.dex...
+I: Baksmaling classes2.dex...
+I: Decoding value resources...
+I: Loading resource table from file: /home/avatar/.local/share/apktool/framework/1.apk
+I: Decoding file resources...
+I: Generating values XMLs...
+I: Decoding AndroidManifest.xml with resources...
+I: Copying original files...
+I: Copying assets...
+I: Copying unknown files...
+
+> Patching
+[1/30] cleanupunused
+[2/30] color
+[3/30] coversize
+[4/30] coversonly
+[5/30] debuggable
+[6/30] dictionary
+[7/30] disableanimation
+[8/30] dispsettingsexpand
+[9/30] extrafonts
+[10/30] extrathemes
+[11/30] fullbleed
+[12/30] hidefooterslider
+[13/30] hyphenation
+[14/30] invertcontent
+[15/30] invertrotation
+[16/30] minsdk
+[17/30] minsize
+[18/30] moretoolbaractions
+[19/30] nofeedback
+[20/30] percentage
+[21/30] progressbadge
+[22/30] prv
+[23/30] pseudomat3
+[24/30] public_hcwv_ctx
+[25/30] seriesdrawer
+[26/30] seriesmeta
+[27/30] signatures
+[28/30] sizestep
+[29/30] version
+[30/30] windowinsets
+
+> Compiling APK to "/tmp/lithiumpatch253475902/apk/patched.apk"
+Picked up JAVA_TOOL_OPTIONS: -Xmx4g
+I: Using Apktool 3.0.3 on upstream-106.apk with 8 threads
+I: Smaling smali folder into classes.dex...
+I: Smaling smali_classes2 folder into classes2.dex...
+I: Building resources with aapt2...
+I: Building apk file...
+I: Importing assets...
+I: Importing unknown files...
+I: Built apk into: /tmp/lithiumpatch253475902/apk/patched.apk
+
+> Zipaligning APK
+
+> Signing APK "/tmp/lithiumpatch253475902/apk/patched.apk" to "patched-106.apk"
+Picked up JAVA_TOOL_OPTIONS: -Xmx4g
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::loadLibrary has been called by org.conscrypt.NativeLibraryUtil in an unnamed module (file:/home/avatar/Downloads/lithium-l10n/build-0.25.2/lithiumpatch/lib/apksigner-0.9.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+
+done
+> Cleaning up /tmp/lithiumpatch253475902

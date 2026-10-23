@@ -1,0 +1,102 @@
+// 開發用輔助工具（本輪為了修 lithiumpatch 對 Lithium 0.25.1 的相容性而加）。
+//
+// 原本的 main.go 每跑一次都要 apktool d + apktool b 一輪（約 2～3 分鐘），
+// 逐個 patch 修復時太慢。這個工具只對「已經解包好的 apktool 目錄」套用 patch，
+// 可以搭配 cp -a 的快速複製反覆試跑，几十毫秒一輪。
+//
+// 用法：
+//
+//	go run ./cmd/patchdir -src <乾淨解包目錄> [-keep <輸出目錄>] [-only patch名] [-list]
+package main
+
+import (
+	"bytes"
+	"fmt"
+	"os"
+	"os/exec"
+	"strings"
+
+	// blank import：只為了觸發 patches 套件的 init()（patches/internal 在其中註冊核心 patch）
+	_ "github.com/pgaskin/lithiumpatch/patches"
+
+	"github.com/pgaskin/lithiumpatch/patches/patchdef"
+
+	"github.com/spf13/pflag"
+)
+
+func main() {
+	pflag.CommandLine.SortFlags = false
+	src := pflag.String("src", "", "乾淨的 apktool 解包目錄（每次先複製再套用）")
+	keep := pflag.String("keep", "", "把套用後的目錄複製到這裡（選配）")
+	only := pflag.StringSlice("only", nil, "只跑指定名字的 patch（可重複）")
+	list := pflag.Bool("list", false, "列出所有 patch 名字後離開")
+	failFast := pflag.Bool("fail-fast", true, "遇到第一個失敗就停止")
+	pflag.Parse()
+
+	if *list {
+		for _, p := range patchdef.Patches() {
+			fmt.Println(p.Name())
+		}
+		return
+	}
+
+	if *src == "" {
+		fmt.Fprintf(os.Stderr, "error: 需要 -src\n")
+		os.Exit(2)
+	}
+
+	// 複製一份乾淨樹，避免污染原始解包結果
+	tmp, err := os.MkdirTemp("", "patchdir")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error: temp dir: %v\n", err)
+		os.Exit(1)
+	}
+	defer os.RemoveAll(tmp)
+	work := tmp + "/apk"
+	if err := exec.Command("cp", "-a", *src, work).Run(); err != nil {
+		fmt.Fprintf(os.Stderr, "error: copy: %v\n", err)
+		os.Exit(1)
+	}
+
+	ps := patchdef.Patches()
+	var failed []string
+	for i, p := range ps {
+		if len(*only) > 0 && !contains(*only, p.Name()) {
+			continue
+		}
+		diff := new(bytes.Buffer)
+		if err := p.Apply(work, diff); err != nil {
+			fmt.Printf("[FAIL %d/%d] %v\n", i+1, len(ps), err)
+			failed = append(failed, p.Name())
+			if *failFast {
+				break
+			}
+			continue
+		}
+		fmt.Printf("[ ok  %d/%d] %s (%d diff bytes)\n", i+1, len(ps), p.Name(), diff.Len())
+	}
+
+	if *keep != "" {
+		_ = os.RemoveAll(*keep)
+		if err := exec.Command("cp", "-a", work, *keep).Run(); err != nil {
+			fmt.Fprintf(os.Stderr, "error: keep copy: %v\n", err)
+			os.Exit(1)
+		}
+		fmt.Printf("> 套用後目錄已複製到 %s\n", *keep)
+	}
+
+	if len(failed) > 0 {
+		fmt.Printf("\n失敗：%s\n", strings.Join(failed, ", "))
+		os.Exit(1)
+	}
+	fmt.Printf("\n全部 patch 套用成功\n")
+}
+
+func contains(xs []string, s string) bool {
+	for _, x := range xs {
+		if x == s {
+			return true
+		}
+	}
+	return false
+}

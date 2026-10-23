@@ -1,0 +1,107 @@
+#!/usr/bin/env python3
+# 分析 lithiumpatch 各 patch 的 patcher 呼叫，找出「比對目標（第一個參數）裡含 .line 行號」
+# 的地方——這些在上游小版本重新編譯後會因行號漂移而失效，需改成 *Smali 容錯版本。
+import sys, os, re, glob
+
+PATCHERS = {
+    'MustContain': 'MustContainSmali',
+    'ReplaceString': 'ReplaceStringSmali',
+    'ReplaceStringPrepend': 'ReplaceStringPrependSmali',
+    'ReplaceStringAppend': 'ReplaceStringAppendSmali',
+}
+
+def extent(s, open_idx):
+    """回傳從 s[open_idx]=='(' 開始的平衡括號結束位置（含右括號）。跳過反引號／雙引號內容。"""
+    depth = 0
+    i = open_idx
+    while i < len(s):
+        c = s[i]
+        if c == '`':
+            j = s.find('`', i + 1)
+            if j < 0:
+                raise SystemExit('未閉合的反引號於 %d' % i)
+            i = j + 1
+            continue
+        if c == '"':
+            j = i + 1
+            while j < len(s):
+                if s[j] == '\\':
+                    j += 2
+                    continue
+                if s[j] == '"':
+                    break
+                j += 1
+            i = j + 1
+            continue
+        if c == '(':
+            depth += 1
+        elif c == ')':
+            depth -= 1
+            if depth == 0:
+                return i
+        i += 1
+    raise SystemExit('未閉合的括號')
+
+def split_args(s, a, b):
+    """在平衡區間內按頂層逗號切分。"""
+    parts = []
+    depth = 0
+    last = a
+    i = a
+    while i < b:
+        c = s[i]
+        if c == '`':
+            j = s.find('`', i + 1)
+            if j < 0 or j > b:
+                i = b
+                continue
+            i = j + 1
+            continue
+        if c == '"':
+            j = i + 1
+            while j < len(s):
+                if s[j] == '\\':
+                    j += 2
+                    continue
+                if s[j] == '"':
+                    break
+                j += 1
+            i = j + 1
+            continue
+        if c in '([{':
+            depth += 1
+        elif c in ')]}':
+            depth -= 1
+        elif c == ',' and depth == 1:
+            parts.append((last, i))
+            last = i + 1
+        i += 1
+    parts.append((last, b))
+    return parts
+
+def main():
+    total = 0
+    for path in sorted(glob.glob('patches/*.go')):
+        src = open(path, encoding='utf-8').read()
+        hits = []
+        for name in PATCHERS:
+            for m in re.finditer(r'(?<![A-Za-z0-9_])' + name + r'\(', src):
+                o = m.end() - 1
+                try:
+                    e = extent(src, o)
+                except SystemExit:
+                    continue
+                args = split_args(src, o, e)
+                if not args:
+                    continue
+                first = src[args[0][0]:args[0][1]]
+                # 只處理「第一個參數是 smali 文字區塊」且裡面有 .line 的情況
+                if '.line ' in first and name in PATCHERS:
+                    hits.append((m.start(), name, first.strip()[:60].replace('\n', ' ')))
+        for pos, name, preview in hits:
+            total += 1
+            print(f'{path}:{src[:pos].count(chr(10))+1}: {name} -> {PATCHERS[name]}   | {preview}')
+    print(f'\n共 {total} 處需要在第一個參數比對時忽略 .line 行號')
+
+if __name__ == '__main__':
+    main()

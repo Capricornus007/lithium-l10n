@@ -1,0 +1,19 @@
+{
+ "pref_category_dict": "Dictionary",
+ "pref_disable_dictionaries_title": "Disable dictionaries",
+ "pref_dict_examples_title": "Show examples",
+ "pref_dict_word_info_title": "Show word info",
+ "pref_dict_small_font_title": "Use smaller font size",
+ "pref_no_page_animation_title": "Disable page turn animation",
+ "pref_fullscreen_bleed_title": "Fullscreen reading full-bleed",
+ "pref_hide_library_footer_title": "Hide footer (grid view)",
+ "pref_hide_reader_footer_title": "Hide footer slider (reader)",
+ "pref_hyphenation_title": "Use hyphenation",
+ "pref_progress_badge_title": "Show reading progress badge",
+ "pref_series_in_drawer_title": "Show series in drawer",
+ "pref_series_metadata_title": "Show series metadata",
+ "display_settings_content_invert": "Invert",
+ "action_invert_rotation": "Invert Rotation",
+ "no_books_series": "No books in series",
+ "series_title": "Series"
+}
